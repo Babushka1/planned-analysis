@@ -400,6 +400,7 @@ function PullQuote({ text }) {
 
 // Demo links for specific project cards
 const DEMO_LINKS = {
+  "6. Supplier Onboarding Self-Service Portal": "/demo/vendor-listing",
   "8. API Middleware / Webhook Connector": "/demo/webhook-connector",
 };
 
