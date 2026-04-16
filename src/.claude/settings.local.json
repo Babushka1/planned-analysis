@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/mcdave/Downloads/planned-analysis/**)",
+      "Bash(node -e \"const fs = require\\('fs'\\); const c = fs.readFileSync\\('src/App.jsx','utf8'\\); console.log\\('Lines:', c.split\\('\\\\n'\\).length, '| No dark gradient:', !c.includes\\('0f0f1a'\\), '| No Space Mono:', !c.includes\\('Space Mono'\\), '| No emoji icons in tabs:', !c.includes\\('cat.icon'\\)\\)\")"
+    ]
+  }
+}
