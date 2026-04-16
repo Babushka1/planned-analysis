@@ -1,22 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import plannedLogo from "./assets/planned.png";
 
-// Planned.com wordmark as SVG inline
-const PlannedLogo = () => (
-  <svg width="120" height="28" viewBox="0 0 120 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <text
-      x="0"
-      y="22"
-      fontFamily="'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
-      fontWeight="600"
-      fontSize="22"
-      letterSpacing="-0.5"
-      fill="#0a0a0a"
-    >
-      planned
-    </text>
-  </svg>
-);
-
+// ─── Data (unchanged) ─────────────────────────────────────────────────────────
 const categories = [
   {
     id: "pain-points",
@@ -249,332 +234,849 @@ const severityStyle = {
 };
 
 const effortStyle = {
-  "Small (1-2 weeks)":     { background: "#0a0a0a", color: "#fff" },
-  "Small-Medium (2 weeks)":{ background: "#0a0a0a", color: "#fff" },
-  "Medium (2-3 weeks)":    { background: "#f0f0f0", color: "#0a0a0a", border: "1px solid #d0d0d0" },
-  "Medium (3 weeks)":      { background: "#f0f0f0", color: "#0a0a0a", border: "1px solid #d0d0d0" },
-  "Medium (3-4 weeks)":    { background: "#f0f0f0", color: "#0a0a0a", border: "1px solid #d0d0d0" },
-  "Large (4-6 weeks)":     { background: "#e8e8e8", color: "#333", border: "1px solid #ccc" },
+  "Small (1-2 weeks)":      { background: "#0a0a0a", color: "#fff" },
+  "Small-Medium (2 weeks)": { background: "#0a0a0a", color: "#fff" },
+  "Medium (2-3 weeks)":     { background: "#f0f0f0", color: "#0a0a0a", border: "1px solid #d0d0d0" },
+  "Medium (3 weeks)":       { background: "#f0f0f0", color: "#0a0a0a", border: "1px solid #d0d0d0" },
+  "Medium (3-4 weeks)":     { background: "#f0f0f0", color: "#0a0a0a", border: "1px solid #d0d0d0" },
+  "Large (4-6 weeks)":      { background: "#e8e8e8", color: "#333", border: "1px solid #ccc" },
 };
 
-export default function PlannedAnalysis() {
-  const [activeCategory, setActiveCategory] = useState("pain-points");
-  const [expandedItem, setExpandedItem] = useState(null);
+// ─── Narrative metadata (section intros + transition quotes) ──────────────────
+const NARRATIVE = [
+  {
+    id: "pain-points",
+    label: "User Pain Points",
+    headline: "Here's what's broken.",
+    intro:
+      "Event planners working with Planned have flagged recurring friction across communication, integrations, and vendor management. These aren't edge cases — they're the platform's most-requested fixes.",
+    pullQuoteBefore: null,
+  },
+  {
+    id: "gaps",
+    label: "Feature Gaps vs. Competitors",
+    headline: "Here's where they're falling behind.",
+    intro:
+      "Planned's core competitors — Cvent, Bizzabo, Stova — offer capabilities that Planned is missing. Some gaps are by design for a focused sourcing platform. Others are real enterprise blockers.",
+    pullQuoteBefore:
+      "So what do these pain points look like against the competitive landscape?",
+  },
+  {
+    id: "strategy",
+    label: "Strategic Observations",
+    headline: "Here's the context behind those gaps.",
+    intro:
+      "Understanding Planned's strategic position explains both the gaps and the opportunities. They're not trying to beat Cvent — they're trying to make Cvent irrelevant for a specific buyer.",
+    pullQuoteBefore:
+      "These gaps don't exist in a vacuum. Planned is making deliberate bets.",
+  },
+  {
+    id: "projects",
+    label: "Projects We Can Build",
+    headline: "Here's how we solve it.",
+    intro:
+      "Given the pain points, the competitive gaps, and Planned's strategic focus on the non-professional planner, these are the highest-leverage builds — ordered by effort and impact.",
+    pullQuoteBefore:
+      "The non-professional planner is the unlock. Every project should make their job easier.",
+  },
+];
 
-  const currentCategory = categories.find((c) => c.id === activeCategory);
+// ─── Squiggly wave path ────────────────────────────────────────────────────────
+const buildWavePath = (segments = 24) => {
+  let d = "M 0 20 Q 25 0, 50 20";
+  for (let i = 1; i <= segments; i++) {
+    d += ` T ${50 + i * 50} 20`;
+  }
+  return d;
+};
+const WAVE_PATH = buildWavePath(24); // 0 → 1250px
 
+// ─── Hooks ─────────────────────────────────────────────────────────────────────
+const PRM =
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function useInView(threshold = 0.12) {
+  const ref = useRef(null);
+  // If user prefers reduced motion, start as visible — no animation
+  const [inView, setInView] = useState(PRM);
+
+  useEffect(() => {
+    if (PRM) return;
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          obs.disconnect(); // fire once only
+        }
+      },
+      { threshold }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+
+  return [ref, inView];
+}
+
+// ─── Squiggly Divider ─────────────────────────────────────────────────────────
+function SquigglyDivider({ color = "#e8e8e8", py = 40, strokeWidth = 2.5 }) {
+  const [ref, inView] = useInView(0.05);
+  return (
+    <div ref={ref} style={{ padding: `${py}px 0`, overflow: "hidden" }}>
+      <svg
+        viewBox="0 0 1250 40"
+        preserveAspectRatio="none"
+        style={{ width: "100%", height: "28px", display: "block" }}
+        aria-hidden="true"
+      >
+        <path
+          d={WAVE_PATH}
+          stroke={color}
+          strokeWidth={strokeWidth}
+          fill="none"
+          strokeLinecap="round"
+          pathLength="1"
+          style={{
+            strokeDasharray: "1",
+            strokeDashoffset: inView ? "0" : "1",
+            transition: PRM
+              ? "none"
+              : "stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1)",
+          }}
+        />
+      </svg>
+    </div>
+  );
+}
+
+// ─── Pull Quote ───────────────────────────────────────────────────────────────
+function PullQuote({ text }) {
+  const [ref, inView] = useInView(0.2);
   return (
     <div
       style={{
-        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-        minHeight: "100vh",
-        background: "#ffffff",
-        color: "#0a0a0a",
+        background: "#fafafa",
+        borderTop: "1px solid #f0f0f0",
+        borderBottom: "1px solid #f0f0f0",
       }}
     >
-      <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-      />
-
-      {/* Header */}
       <div
+        ref={ref}
         style={{
-          padding: "32px 24px 24px",
-          borderBottom: "1px solid #e8e8e8",
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "16px",
+          maxWidth: "760px",
+          margin: "0 auto",
+          padding: "clamp(40px, 6vw, 72px) 40px",
+          textAlign: "center",
+          opacity: inView ? 1 : 0,
+          transform: inView
+            ? "scale(1) translateY(0)"
+            : "scale(0.97) translateY(14px)",
+          transition: PRM
+            ? "none"
+            : "opacity 0.7s ease, transform 0.7s ease",
         }}
       >
-        <div>
-          <div style={{ marginBottom: "16px" }}>
-            <PlannedLogo />
-          </div>
-          <h1
-            style={{
-              fontSize: "22px",
-              fontWeight: 600,
-              color: "#0a0a0a",
-              margin: "0 0 6px 0",
-              lineHeight: 1.3,
-              letterSpacing: "-0.3px",
-            }}
-          >
-            Product Analysis
-          </h1>
-          <p
-            style={{
-              fontSize: "14px",
-              color: "#666",
-              margin: 0,
-              lineHeight: 1.5,
-            }}
-          >
-            Corporate event sourcing, contracting &amp; payment platform
-          </p>
-        </div>
+        <p
+          style={{
+            fontSize: "clamp(17px, 2vw, 22px)",
+            fontWeight: 400,
+            color: "#555",
+            lineHeight: 1.65,
+            margin: 0,
+            fontStyle: "italic",
+            letterSpacing: "-0.2px",
+          }}
+        >
+          &ldquo;{text}&rdquo;
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Item Card (always expanded) ──────────────────────────────────────────────
+function ItemCard({ item, index, color }) {
+  const [ref, inView] = useInView(0.08);
+  const delay = PRM ? 0 : Math.min(index, 7) * 80;
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        background: "#fff",
+        border: "1px solid #e8e8e8",
+        borderLeft: `3px solid ${color}`,
+        borderRadius: "10px",
+        padding: "22px 22px 20px 20px",
+        opacity: inView ? 1 : 0,
+        transform: inView ? "translateY(0)" : "translateY(20px)",
+        transition: PRM
+          ? "none"
+          : `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`,
+      }}
+    >
+      {/* Tags row */}
+      {(item.severity || item.effort) && (
         <div
           style={{
             display: "flex",
-            gap: "24px",
-            fontSize: "12px",
-            color: "#888",
-            alignItems: "flex-end",
-            paddingBottom: "2px",
+            gap: "6px",
+            flexWrap: "wrap",
+            marginBottom: "12px",
           }}
         >
-          <div><span style={{ display: "block", fontSize: "18px", fontWeight: 700, color: "#0a0a0a" }}>230K+</span>suppliers</div>
-          <div><span style={{ display: "block", fontSize: "18px", fontWeight: 700, color: "#0a0a0a" }}>$54.6M</span>raised</div>
-          <div><span style={{ display: "block", fontSize: "18px", fontWeight: 700, color: "#0a0a0a" }}>71</span>employees</div>
+          {item.severity && (
+            <span
+              style={{
+                fontSize: "10px",
+                fontWeight: 600,
+                padding: "3px 8px",
+                borderRadius: "4px",
+                letterSpacing: "0.4px",
+                textTransform: "uppercase",
+                ...(severityStyle[item.severity] || severityStyle.Low),
+              }}
+            >
+              {item.severity}
+            </span>
+          )}
+          {item.effort && (
+            <span
+              style={{
+                fontSize: "10px",
+                fontWeight: 600,
+                padding: "3px 8px",
+                borderRadius: "4px",
+                letterSpacing: "0.3px",
+                ...(effortStyle[item.effort] ||
+                  effortStyle["Medium (2-3 weeks)"]),
+              }}
+            >
+              {item.effort}
+            </span>
+          )}
         </div>
-      </div>
+      )}
 
-      {/* Category Tabs */}
-      <div
+      {/* Title */}
+      <h3
         style={{
-          display: "flex",
-          borderBottom: "1px solid #e8e8e8",
-          overflowX: "auto",
-          background: "#fafafa",
+          fontSize: "14px",
+          fontWeight: 600,
+          color: "#0a0a0a",
+          margin: "0 0 10px 0",
+          lineHeight: 1.4,
+          letterSpacing: "-0.1px",
         }}
       >
-        {categories.map((cat) => {
-          const isActive = activeCategory === cat.id;
-          return (
-            <button
-              key={cat.id}
-              onClick={() => {
-                setActiveCategory(cat.id);
-                setExpandedItem(null);
-              }}
-              style={{
-                flex: "1 1 0",
-                minWidth: "120px",
-                padding: "14px 12px",
-                background: "transparent",
-                border: "none",
-                borderBottom: isActive ? "2px solid #0a0a0a" : "2px solid transparent",
-                color: isActive ? "#0a0a0a" : "#888",
-                cursor: "pointer",
-                fontFamily: "inherit",
-                fontSize: "13px",
-                fontWeight: isActive ? 600 : 400,
-                transition: "all 0.15s",
-                textAlign: "center",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {cat.label}
-              <span
-                style={{
-                  display: "inline-block",
-                  marginLeft: "6px",
-                  fontSize: "11px",
-                  color: isActive ? "#0a0a0a" : "#bbb",
-                  fontWeight: 400,
-                }}
-              >
-                {cat.items.length}
-              </span>
-            </button>
-          );
-        })}
-      </div>
+        {item.title}
+      </h3>
 
-      {/* Items */}
-      <div style={{ padding: "16px 20px" }}>
-        {currentCategory.items.map((item, i) => {
-          const isExpanded = expandedItem === i;
-          return (
-            <div
-              key={i}
-              onClick={() => setExpandedItem(isExpanded ? null : i)}
-              style={{
-                background: isExpanded ? "#fafafa" : "#fff",
-                border: "1px solid",
-                borderColor: isExpanded ? "#d0d0d0" : "#e8e8e8",
-                borderRadius: "8px",
-                padding: "16px 18px",
-                marginBottom: "8px",
-                cursor: "pointer",
-                transition: "border-color 0.15s, background 0.15s",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                  gap: "12px",
-                }}
-              >
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <h3
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: 600,
-                      color: "#0a0a0a",
-                      margin: "0 0 5px 0",
-                      lineHeight: 1.4,
-                      letterSpacing: "-0.1px",
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-                  {!isExpanded && (
-                    <p
-                      style={{
-                        fontSize: "13px",
-                        color: "#888",
-                        margin: 0,
-                        lineHeight: 1.5,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                      }}
-                    >
-                      {item.description}
-                    </p>
-                  )}
-                </div>
-                <div style={{ display: "flex", gap: "6px", flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end" }}>
-                  {item.severity && (
-                    <span
-                      style={{
-                        fontSize: "10px",
-                        fontWeight: 600,
-                        padding: "3px 8px",
-                        borderRadius: "4px",
-                        letterSpacing: "0.3px",
-                        textTransform: "uppercase",
-                        ...(severityStyle[item.severity] || severityStyle.Low),
-                      }}
-                    >
-                      {item.severity}
-                    </span>
-                  )}
-                  {item.effort && (
-                    <span
-                      style={{
-                        fontSize: "10px",
-                        fontWeight: 600,
-                        padding: "3px 8px",
-                        borderRadius: "4px",
-                        letterSpacing: "0.3px",
-                        ...(effortStyle[item.effort] || effortStyle["Medium (2-3 weeks)"]),
-                      }}
-                    >
-                      {item.effort}
-                    </span>
-                  )}
-                </div>
-              </div>
+      {/* Description */}
+      <p
+        style={{
+          fontSize: "13px",
+          color: "#555",
+          margin: "0",
+          lineHeight: 1.65,
+        }}
+      >
+        {item.description}
+      </p>
 
-              {isExpanded && (
-                <div
-                  style={{
-                    marginTop: "12px",
-                    paddingTop: "12px",
-                    borderTop: "1px solid #e8e8e8",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontSize: "13px",
-                      color: "#444",
-                      margin: "0 0 14px 0",
-                      lineHeight: 1.65,
-                    }}
-                  >
-                    {item.description}
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "14px 24px",
-                      fontSize: "12px",
-                    }}
-                  >
-                    {item.source && (
-                      <div>
-                        <span style={{ color: "#aaa", textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "10px", fontWeight: 600 }}>Source</span>
-                        <div style={{ color: "#555", marginTop: "2px" }}>{item.source}</div>
-                      </div>
-                    )}
-                    {item.competitor && (
-                      <div>
-                        <span style={{ color: "#aaa", textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "10px", fontWeight: 600 }}>Competitors with this</span>
-                        <div style={{ color: "#333", marginTop: "2px" }}>{item.competitor}</div>
-                      </div>
-                    )}
-                    {item.tech && (
-                      <div>
-                        <span style={{ color: "#aaa", textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "10px", fontWeight: 600 }}>Tech stack</span>
-                        <div style={{ color: "#333", marginTop: "2px" }}>{item.tech}</div>
-                      </div>
-                    )}
-                    {item.impact && (
-                      <div>
-                        <span style={{ color: "#aaa", textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "10px", fontWeight: 600 }}>Impact</span>
-                        <div style={{ color: "#333", fontWeight: 500, marginTop: "2px" }}>{item.impact}</div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Recommended Start Order */}
-      {activeCategory === "projects" && (
+      {/* Metadata footer */}
+      {(item.source || item.competitor || item.tech || item.impact) && (
         <div
           style={{
-            margin: "0 20px 28px",
-            padding: "20px 24px",
-            background: "#fafafa",
-            border: "1px solid #e0e0e0",
-            borderRadius: "8px",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "12px 20px",
+            marginTop: "16px",
+            paddingTop: "14px",
+            borderTop: "1px solid #f0f0f0",
           }}
         >
-          <h3
-            style={{
-              fontSize: "11px",
-              fontWeight: 700,
-              color: "#888",
-              margin: "0 0 16px 0",
-              letterSpacing: "1px",
-              textTransform: "uppercase",
-            }}
-          >
-            Recommended Start Order
-          </h3>
-          <div style={{ fontSize: "13px", color: "#444", lineHeight: 1.7 }}>
-            {[
-              { week: "Week 1–2", project: "#9 AI Meeting Request Assistant", note: "Quickest win — showcases AI, directly helps non-professional planners" },
-              { week: "Week 3–5", project: "#1 Smart Contract Analyzer", note: "Builds on Planned's existing AI capability, high value for procurement" },
-              { week: "Week 5–7", project: "#4 Budget Forecaster", note: "Net-new feature competitors lack, great for demos and sales" },
-              { week: "Week 7+",  project: "#3 Communication Hub", note: "Largest scope — solves the #1 pain point across all user reviews" },
-            ].map(({ week, project, note }, i) => (
-              <div key={i} style={{ display: "flex", gap: "16px", marginBottom: i < 3 ? "12px" : 0, alignItems: "flex-start" }}>
-                <span style={{ minWidth: "72px", fontSize: "11px", fontWeight: 600, color: "#0a0a0a", paddingTop: "1px", textTransform: "uppercase", letterSpacing: "0.3px" }}>{week}</span>
-                <div>
-                  <span style={{ fontWeight: 600, color: "#0a0a0a" }}>{project}</span>
-                  <span style={{ color: "#888" }}> — {note}</span>
-                </div>
+          {item.source && (
+            <div>
+              <div
+                style={{
+                  color: "#aaa",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  fontSize: "10px",
+                  fontWeight: 600,
+                  marginBottom: "3px",
+                }}
+              >
+                Source
               </div>
-            ))}
-          </div>
+              <div style={{ color: "#555", fontSize: "12px" }}>
+                {item.source}
+              </div>
+            </div>
+          )}
+          {item.competitor && (
+            <div>
+              <div
+                style={{
+                  color: "#aaa",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  fontSize: "10px",
+                  fontWeight: 600,
+                  marginBottom: "3px",
+                }}
+              >
+                Competitors with this
+              </div>
+              <div style={{ color: "#333", fontSize: "12px" }}>
+                {item.competitor}
+              </div>
+            </div>
+          )}
+          {item.tech && (
+            <div>
+              <div
+                style={{
+                  color: "#aaa",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  fontSize: "10px",
+                  fontWeight: 600,
+                  marginBottom: "3px",
+                }}
+              >
+                Tech stack
+              </div>
+              <div style={{ color: "#333", fontSize: "12px" }}>{item.tech}</div>
+            </div>
+          )}
+          {item.impact && (
+            <div>
+              <div
+                style={{
+                  color: "#aaa",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  fontSize: "10px",
+                  fontWeight: 600,
+                  marginBottom: "3px",
+                }}
+              >
+                Impact
+              </div>
+              <div style={{ color: "#333", fontSize: "12px", fontWeight: 500 }}>
+                {item.impact}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 }
 
+// ─── Narrative Section ────────────────────────────────────────────────────────
+function NarrativeSection({ narrative, category }) {
+  const [headingRef, headingInView] = useInView(0.15);
+
+  return (
+    <section
+      id={category.id}
+      style={{ background: "#fff", borderTop: "1px solid #f0f0f0" }}
+    >
+      <div className="section-inner">
+        <div
+          ref={headingRef}
+          style={{
+            opacity: headingInView ? 1 : 0,
+            transform: headingInView ? "translateY(0)" : "translateY(32px)",
+            transition: PRM
+              ? "none"
+              : "opacity 0.65s ease, transform 0.65s ease",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "1.5px",
+              textTransform: "uppercase",
+              color: category.color,
+              marginBottom: "14px",
+            }}
+          >
+            {narrative.label}
+          </div>
+          <h2
+            style={{
+              fontSize: "clamp(28px, 4.5vw, 52px)",
+              fontWeight: 700,
+              color: "#0a0a0a",
+              margin: "0 0 20px 0",
+              lineHeight: 1.1,
+              letterSpacing: "-1.5px",
+            }}
+          >
+            {narrative.headline}
+          </h2>
+          <p
+            style={{
+              fontSize: "clamp(15px, 1.5vw, 17px)",
+              color: "#666",
+              maxWidth: "640px",
+              lineHeight: 1.7,
+              letterSpacing: "-0.1px",
+            }}
+          >
+            {narrative.intro}
+          </p>
+        </div>
+
+        <div className="card-grid">
+          {category.items.map((item, i) => (
+            <ItemCard key={i} item={item} index={i} color={category.color} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Hero Section ─────────────────────────────────────────────────────────────
+function HeroSection() {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    if (PRM) return;
+    const handler = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  const parallax = PRM ? 0 : scrollY * 0.22;
+
+  return (
+    <section
+      style={{
+        position: "relative",
+        background: "#0a0a0a",
+        overflow: "hidden",
+        minHeight: "72vh",
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      {/* Parallax background squiggle */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: -4,
+          left: 0,
+          right: 0,
+          transform: `translateY(${parallax}px)`,
+          opacity: 0.1,
+          pointerEvents: "none",
+        }}
+      >
+        <svg
+          viewBox="0 0 1250 40"
+          preserveAspectRatio="none"
+          style={{ width: "100%", height: "64px", display: "block" }}
+        >
+          <path
+            d={WAVE_PATH}
+            stroke="#ffffff"
+            strokeWidth="3"
+            fill="none"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+
+      {/* Second offset squiggle for depth */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: 40,
+          left: 0,
+          right: 0,
+          transform: `translateY(${parallax * 0.6}px)`,
+          opacity: 0.05,
+          pointerEvents: "none",
+        }}
+      >
+        <svg
+          viewBox="0 0 1250 40"
+          preserveAspectRatio="none"
+          style={{ width: "100%", height: "48px", display: "block" }}
+        >
+          <path
+            d={WAVE_PATH}
+            stroke="#ffffff"
+            strokeWidth="4"
+            fill="none"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+
+      {/* Content */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "clamp(72px, 10vw, 120px) 48px clamp(72px, 8vw, 100px)",
+          width: "100%",
+        }}
+      >
+        {/* Logo */}
+        <div style={{ marginBottom: "44px" }}>
+          <img
+            src={plannedLogo}
+            alt="Planned"
+            style={{
+              height: "48px",
+              display: "block",
+              filter: "brightness(0) invert(1)",
+            }}
+          />
+        </div>
+
+        {/* Eyebrow */}
+        <div
+          style={{
+            fontSize: "11px",
+            fontWeight: 700,
+            letterSpacing: "2px",
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.4)",
+            marginBottom: "20px",
+          }}
+        >
+          Product Deep Dive
+        </div>
+
+        {/* Title */}
+        <h1
+          style={{
+            fontSize: "clamp(40px, 7.5vw, 88px)",
+            fontWeight: 700,
+            color: "#ffffff",
+            margin: "0 0 24px 0",
+            lineHeight: 1.02,
+            letterSpacing: "-2.5px",
+            maxWidth: "820px",
+          }}
+        >
+          Planned.com Analysis
+        </h1>
+
+        {/* Tagline */}
+        <p
+          style={{
+            fontSize: "clamp(16px, 2vw, 20px)",
+            color: "rgba(255,255,255,0.5)",
+            margin: "0 0 64px 0",
+            maxWidth: "560px",
+            lineHeight: 1.6,
+            letterSpacing: "-0.2px",
+          }}
+        >
+          A corporate event sourcing and payment platform — here&rsquo;s where
+          it excels, where it falls short, and how to build what&rsquo;s
+          missing.
+        </p>
+
+        {/* Stats */}
+        <div
+          style={{
+            display: "flex",
+            gap: "clamp(28px, 5vw, 64px)",
+            flexWrap: "wrap",
+          }}
+        >
+          {[
+            { value: "230K+", label: "suppliers" },
+            { value: "$54.6M", label: "raised" },
+            { value: "71", label: "employees" },
+          ].map(({ value, label }) => (
+            <div key={label}>
+              <div
+                style={{
+                  fontSize: "clamp(22px, 3vw, 34px)",
+                  fontWeight: 700,
+                  color: "#fff",
+                  lineHeight: 1,
+                  letterSpacing: "-0.5px",
+                }}
+              >
+                {value}
+              </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "rgba(255,255,255,0.35)",
+                  marginTop: "7px",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.8px",
+                  fontWeight: 500,
+                }}
+              >
+                {label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Closing Section ──────────────────────────────────────────────────────────
+function ClosingSection() {
+  const [headingRef, headingInView] = useInView(0.1);
+
+  const startOrder = [
+    {
+      week: "Week 1–2",
+      project: "#9 AI Meeting Request Assistant",
+      note: "Quickest win — showcases AI, directly helps non-professional planners",
+    },
+    {
+      week: "Week 3–5",
+      project: "#1 Smart Contract Analyzer",
+      note: "Builds on Planned's existing AI capability, high value for procurement",
+    },
+    {
+      week: "Week 5–7",
+      project: "#4 Budget Forecaster",
+      note: "Net-new feature competitors lack, great for demos and sales",
+    },
+    {
+      week: "Week 7+",
+      project: "#3 Communication Hub",
+      note: "Largest scope — solves the #1 pain point across all user reviews",
+    },
+  ];
+
+  return (
+    <section style={{ background: "#fafafa", borderTop: "1px solid #f0f0f0" }}>
+      <div className="section-inner">
+        <div
+          ref={headingRef}
+          style={{
+            opacity: headingInView ? 1 : 0,
+            transform: headingInView ? "translateY(0)" : "translateY(28px)",
+            transition: PRM
+              ? "none"
+              : "opacity 0.65s ease, transform 0.65s ease",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "1.5px",
+              textTransform: "uppercase",
+              color: "#27AE60",
+              marginBottom: "14px",
+            }}
+          >
+            Recommended Start Order
+          </div>
+          <h2
+            style={{
+              fontSize: "clamp(24px, 3.5vw, 44px)",
+              fontWeight: 700,
+              color: "#0a0a0a",
+              margin: "0 0 48px 0",
+              lineHeight: 1.1,
+              letterSpacing: "-1px",
+            }}
+          >
+            Where to start.
+          </h2>
+        </div>
+
+        <div>
+          {startOrder.map(({ week, project, note }, i) => {
+            return (
+              <ClosingRow
+                key={i}
+                week={week}
+                project={project}
+                note={note}
+                index={i}
+                parentInView={headingInView}
+                isFirst={i === 0}
+              />
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ClosingRow({ week, project, note, index, parentInView, isFirst }) {
+  const delay = PRM ? 0 : 300 + index * 100;
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: "clamp(16px, 3vw, 32px)",
+        padding: "24px 0",
+        borderTop: isFirst ? "2px solid #0a0a0a" : "1px solid #e8e8e8",
+        alignItems: "flex-start",
+        opacity: parentInView ? 1 : 0,
+        transform: parentInView ? "translateY(0)" : "translateY(16px)",
+        transition: PRM
+          ? "none"
+          : `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`,
+      }}
+    >
+      <div
+        style={{
+          minWidth: "80px",
+          fontSize: "10px",
+          fontWeight: 700,
+          color: "#0a0a0a",
+          textTransform: "uppercase",
+          letterSpacing: "0.6px",
+          paddingTop: "3px",
+        }}
+      >
+        {week}
+      </div>
+      <div>
+        <div
+          style={{
+            fontWeight: 600,
+            color: "#0a0a0a",
+            fontSize: "15px",
+            marginBottom: "5px",
+          }}
+        >
+          {project}
+        </div>
+        <div style={{ color: "#888", fontSize: "13px", lineHeight: 1.55 }}>
+          {note}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+function Footer() {
+  const [ref, inView] = useInView(0.1);
+  return (
+    <footer
+      style={{
+        background: "#0a0a0a",
+        overflow: "hidden",
+        paddingTop: "48px",
+      }}
+    >
+      {/* Squiggle decoration */}
+      <div
+        ref={ref}
+        style={{ paddingBottom: "0", overflow: "hidden" }}
+        aria-hidden="true"
+      >
+        <svg
+          viewBox="0 0 1250 40"
+          preserveAspectRatio="none"
+          style={{ width: "100%", height: "28px", display: "block" }}
+        >
+          <path
+            d={WAVE_PATH}
+            stroke="rgba(255,255,255,0.15)"
+            strokeWidth="2"
+            fill="none"
+            strokeLinecap="round"
+            pathLength="1"
+            style={{
+              strokeDasharray: "1",
+              strokeDashoffset: inView ? "0" : "1",
+              transition: PRM
+                ? "none"
+                : "stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1)",
+            }}
+          />
+        </svg>
+      </div>
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "32px 48px 48px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "16px",
+        }}
+      >
+        <img
+          src={plannedLogo}
+          alt="Planned"
+          style={{
+            height: "28px",
+            filter: "brightness(0) invert(1)",
+            opacity: 0.5,
+          }}
+        />
+        <p
+          style={{
+            fontSize: "12px",
+            color: "rgba(255,255,255,0.25)",
+            margin: 0,
+            letterSpacing: "0.3px",
+          }}
+        >
+          Product Analysis · 2025
+        </p>
+      </div>
+    </footer>
+  );
+}
+
+// ─── App ──────────────────────────────────────────────────────────────────────
+export default function PlannedAnalysis() {
+  return (
+    <div
+      style={{
+        fontFamily:
+          "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      }}
+    >
+      <HeroSection />
+
+      {NARRATIVE.map((narrative) => {
+        const category = categories.find((c) => c.id === narrative.id);
+        return (
+          <div key={narrative.id}>
+            {narrative.pullQuoteBefore && (
+              <PullQuote text={narrative.pullQuoteBefore} />
+            )}
+            <SquigglyDivider color={category.color} py={0} />
+            <NarrativeSection narrative={narrative} category={category} />
+          </div>
+        );
+      })}
+
+      <SquigglyDivider color="#27AE60" py={0} />
+      <ClosingSection />
+      <Footer />
+    </div>
+  );
+}
