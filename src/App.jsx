@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import plannedLogo from "./assets/planned.png";
 
 // ─── Data (unchanged) ─────────────────────────────────────────────────────────
@@ -397,8 +398,14 @@ function PullQuote({ text }) {
   );
 }
 
+// Demo links for specific project cards
+const DEMO_LINKS = {
+  "8. API Middleware / Webhook Connector": "/demo/webhook-connector",
+};
+
 // ─── Item Card (always expanded) ──────────────────────────────────────────────
 function ItemCard({ item, index, color }) {
+  const demoLink = DEMO_LINKS[item.title];
   const [ref, inView] = useInView(0.08);
   const delay = PRM ? 0 : Math.min(index, 7) * 80;
 
@@ -573,6 +580,26 @@ function ItemCard({ item, index, color }) {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Demo link */}
+      {demoLink && (
+        <div style={{ marginTop: "16px", paddingTop: "14px", borderTop: "1px solid #f0f0f0" }}>
+          <Link
+            to={demoLink}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "12px",
+              fontWeight: 600,
+              color: color,
+              textDecoration: "none",
+            }}
+          >
+            See the demo &rarr;
+          </Link>
         </div>
       )}
     </div>
