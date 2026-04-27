@@ -251,8 +251,7 @@ const NARRATIVE = [
     headline: "Here's where the platform falls behind.",
     intro:
       "Planned's core competitors — Cvent, Bizzabo, Stova — offer capabilities that Planned is missing. Some gaps are by design for a focused sourcing platform. Others are real enterprise blockers.",
-    pullQuoteBefore:
-      "So what do these pain points look like against the competitive landscape?",
+    pullQuoteBefore: null,
   },
   {
     id: "strategy",
@@ -260,8 +259,7 @@ const NARRATIVE = [
     headline: "Here's the context behind those gaps.",
     intro:
       "Understanding Planned's strategic position explains both the gaps and the opportunities. The goal isn't to beat Cvent — it's to make Cvent irrelevant for a specific buyer.",
-    pullQuoteBefore:
-      "These gaps don't exist in a vacuum. Planned is making deliberate bets.",
+    pullQuoteBefore: null,
   },
   {
     id: "projects",
@@ -269,8 +267,7 @@ const NARRATIVE = [
     headline: "Here's how we solve it.",
     intro:
       "Given the pain points, the competitive gaps, and Planned's strategic focus on the non-professional planner, these are the highest-leverage builds — ordered by effort and impact.",
-    pullQuoteBefore:
-      "The non-professional planner is the unlock. Every project should make their job easier.",
+    pullQuoteBefore: null,
   },
 ];
 
