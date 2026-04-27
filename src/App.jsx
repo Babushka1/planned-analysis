@@ -21,7 +21,7 @@ const categories = [
       {
         title: "Document Sharing UX Is Broken",
         description:
-          "Users find it challenging to send and receive documents through the inbox/messaging feature. Planned's own team acknowledged this in review responses, saying they're working on a fix.",
+          "Users find it challenging to send and receive documents through the inbox/messaging feature. Planned's own team acknowledged this in review responses, saying a fix is in progress.",
         severity: "High",
         source: "Capterra review (Greg B.)",
         sourceUrl: "https://www.capterra.com/p/234623/Planned/reviews/",
@@ -29,7 +29,7 @@ const categories = [
       {
         title: "No Public API Available",
         description:
-          "GetApp confirms Planned does not offer an API. This blocks integrations with CRMs (Salesforce, HubSpot), travel management tools, expense systems, and custom enterprise workflows — a dealbreaker for large organizations.",
+          "To my knowledge, there is no Planned API. This blocks integrations with CRMs (Salesforce, HubSpot), travel management tools, expense systems, and custom enterprise workflows — a dealbreaker for large organizations.",
         severity: "Critical",
         source: "GetApp listing",
         sourceUrl: "https://www.getapp.com/collaboration-software/a/planned/",
@@ -117,31 +117,39 @@ const categories = [
     color: "#27AE60",
     items: [
       {
-        title: "1. Smart Contract Clause Analyzer",
+        title: "1. Supplier Onboarding Self-Service Portal",
         description:
-          "Planned already flags key terms in contracts using AI. We can build a standalone tool that ingests venue/vendor contracts (PDF or text), extracts and categorizes clauses (cancellation, attrition, F&B minimums, force majeure, liability), compares them against industry benchmarks, and generates a plain-English risk summary with recommendations.",
-        effort: "Medium (2-3 weeks)",
-        tech: "Python, Claude API, PDF parsing (PyMuPDF), React dashboard",
-        impact: "Directly enhances Planned's core differentiator",
+          "A standalone portal where vendors can claim/create their listing, upload photos and 360° tours, set availability calendars, manage team member access, and update pricing — all without contacting Planned support. Directly addresses vendor-side friction from reviews.",
+        effort: "Large (4-6 weeks)",
+        tech: "React, Node.js, image upload/CDN, calendar component",
+        impact: "Reduces support load, scales the marketplace",
       },
       {
-        title: "2. Venue Recommendation Engine Prototype",
+        title: "2. API Middleware / Webhook Connector",
         description:
-          "Build a conversational venue finder where a planner describes their event in natural language ('50-person leadership retreat near Austin, outdoor space, under $8k, mid-October') and gets ranked venue recommendations with pricing estimates, photo galleries, and availability indicators. Could pull from public venue data or mock Planned's 230k marketplace.",
-        effort: "Medium (2-3 weeks)",
-        tech: "Claude API, vector embeddings, React UI, geocoding API",
-        impact: "Modernizes the sourcing flow — Planned's #1 feature",
+          "Since Planned has no API, build a middleware layer that could sit between Planned and enterprise systems. Even a proof-of-concept showing how event data could sync bidirectionally with Salesforce, SAP Concur, or Slack via webhooks would demonstrate the value of API investment to the product team.",
+        effort: "Medium (3 weeks)",
+        tech: "Node.js, Express, webhook handlers, OAuth flows, Zapier integration",
+        impact: "Addresses the most critical enterprise gap",
       },
       {
         title: "3. Attendee Communication Hub",
         description:
-          "Build a multi-channel communication dashboard that would solve the biggest user complaint. Features: threaded conversations per event, email + in-app messaging toggle, contract version tracking within threads, @mentions for team collaboration, and read receipts. This directly addresses the 'hard to communicate on the platform' pain point.",
+          "Build a multi-channel communication dashboard that solves the most common user complaint. Features: threaded conversations per event, email + in-app messaging toggle, contract version tracking within threads, @mentions for team collaboration, and read receipts.",
         effort: "Large (4-6 weeks)",
         tech: "React, WebSocket/SSE, Node.js, email integration (SendGrid)",
         impact: "Solves the #1 user complaint across all review sites",
       },
       {
-        title: "4. Event Budget Forecaster & Scenario Planner",
+        title: "4. AI Venue & Meeting Request Assistant",
+        description:
+          "Two natural-language interfaces, one underlying idea. The venue engine lets a planner describe their event in plain language ('50-person leadership retreat near Austin, outdoor space, under $8k, mid-October') and returns ranked venue recommendations. The MRF assistant takes the same input and pre-fills Planned's meeting request form automatically — routing it for approval without manual field entry. Start with the MRF (1–2 weeks); expand to the venue engine from there.",
+        effort: "Small (1-2 weeks)",
+        tech: "Claude API, React, vector embeddings, geocoding API, JSON schema mapping",
+        impact: "Removes the biggest barrier for non-professional planners",
+      },
+      {
+        title: "5. Event Budget Forecaster & Scenario Planner",
         description:
           "An interactive tool where planners input event parameters (headcount, city, event type, duration) and get AI-generated budget estimates broken down by category (venue, F&B, AV, travel, accommodation). Include a scenario comparison mode: 'What if we do Chicago vs. Miami?' or 'What if attendance drops 20%?' — with attrition cost modeling.",
         effort: "Medium (2-3 weeks)",
@@ -149,20 +157,12 @@ const categories = [
         impact: "New value-add feature Planned doesn't currently offer",
       },
       {
-        title: "5. RFP Auto-Generator & Tracker",
+        title: "6. RFP Auto-Generator & Tracker",
         description:
           "A tool that takes a brief event description and generates a polished, standardized RFP document ready to send to venues. Include tracking: which venues opened it, who responded, response time analytics, and a comparison matrix of received proposals. Export to PDF or integrate with Planned's workflow.",
         effort: "Medium (3-4 weeks)",
         tech: "Claude API, React, PDF generation (jsPDF), email tracking pixels",
         impact: "Automates the most time-intensive planning task",
-      },
-      {
-        title: "6. Supplier Onboarding Self-Service Portal",
-        description:
-          "A standalone portal where vendors can claim/create their listing, upload photos and 360° tours, set availability calendars, manage team member access, and update pricing — all without contacting Planned support. Directly addresses vendor-side friction from reviews.",
-        effort: "Large (4-6 weeks)",
-        tech: "React, Node.js, image upload/CDN, calendar component",
-        impact: "Reduces support load, scales the marketplace",
       },
       {
         title: "7. Post-Event Feedback & Analytics Dashboard",
@@ -173,23 +173,7 @@ const categories = [
         impact: "Fills a major gap vs. competitors like Cvent and Bizzabo",
       },
       {
-        title: "8. API Middleware / Webhook Connector",
-        description:
-          "Since Planned has no API, build a middleware layer that could sit between Planned and enterprise systems. Even a proof-of-concept showing how event data could sync bidirectionally with Salesforce, SAP Concur, or Slack via webhooks would demonstrate the value of API investment to their product team.",
-        effort: "Medium (3 weeks)",
-        tech: "Node.js, Express, webhook handlers, OAuth flows, Zapier integration",
-        impact: "Addresses the most critical enterprise gap",
-      },
-      {
-        title: "9. AI Meeting Request Form (MRF) Assistant",
-        description:
-          "Planned already has MRF & approval flows. Build a smarter front-end where an employee can just describe what they need in plain language ('I need a room for 20 near our NYC office for a client dinner next Thursday') and the AI pre-fills the entire MRF, suggests policy-compliant options, and routes it for approval automatically.",
-        effort: "Small (1-2 weeks)",
-        tech: "Claude API, React form, JSON schema mapping",
-        impact: "Makes MRFs effortless for non-professional planners",
-      },
-      {
-        title: "10. Event ROI Calculator & Reporting Tool",
+        title: "8. Event ROI Calculator & Reporting Tool",
         description:
           "A standalone calculator where procurement teams input event costs, attendee data, and business outcomes (deals closed, leads generated, employee satisfaction scores) and get a computed ROI with visual breakdowns. Include benchmarking against industry averages and exportable executive reports.",
         effort: "Small-Medium (2 weeks)",
@@ -210,9 +194,9 @@ const categories = [
           "Planned occupies a specific niche: vendor sourcing, contracting, payment, and compliance for corporate meetings. It's NOT trying to be a full event execution platform. This is both a strength (simplicity, focus) and a limitation (missing post-sourcing features). Industry analysts describe it as a 'vendor sourcing + financial control system.'",
       },
       {
-        title: "AI Is Their Key Differentiator",
+        title: "AI Is the Key Differentiator",
         description:
-          "Planned's Head of AI (Nim Cheema) leads active AI implementation. Their AI reads contracts, auto-fills event briefs, matches suppliers, and extracts room block data. This is ahead of most competitors. Doubling down on AI capabilities is their clearest path to winning against Cvent.",
+          "Planned has active AI implementation built into the product. The AI reads contracts, auto-fills event briefs, matches suppliers, and extracts room block data — ahead of most competitors. Doubling down on AI capabilities is the clearest path to winning against Cvent.",
       },
       {
         title: "Target Market Is Shifting Up",
@@ -222,7 +206,7 @@ const categories = [
       {
         title: "Montréal HQ with $54.6M Raised",
         description:
-          "71 employees, backed by Drive Capital, Outsiders Fund, and RBCx among 19 investors. The funding supports aggressive product development, but they're competing against Cvent (publicly traded, massive) with a fraction of the resources. Speed and UX quality are their advantages.",
+          "71 employees, backed by Drive Capital, Outsiders Fund, and RBCx among 19 investors. The funding supports aggressive product development, competing against Cvent (publicly traded, massive) with a fraction of the resources. Speed and UX quality are the key advantages.",
       },
       {
         title: "The 'Non-Professional Planner' Angle Is Brilliant",
@@ -258,11 +242,13 @@ const NARRATIVE = [
     intro:
       "Event planners working with Planned have flagged recurring friction across communication, integrations, and vendor management. These aren't edge cases — they're the platform's most-requested fixes.",
     pullQuoteBefore: null,
+    disclaimer:
+      "This is my personal analysis based on publicly available information — I don't have visibility into what the team is working on internally. It's very possible some of these problems are already being addressed, or that certain directions aren't feasible given constraints I'm not aware of.",
   },
   {
     id: "gaps",
     label: "Feature Gaps vs. Competitors",
-    headline: "Here's where they're falling behind.",
+    headline: "Here's where the platform falls behind.",
     intro:
       "Planned's core competitors — Cvent, Bizzabo, Stova — offer capabilities that Planned is missing. Some gaps are by design for a focused sourcing platform. Others are real enterprise blockers.",
     pullQuoteBefore:
@@ -273,7 +259,7 @@ const NARRATIVE = [
     label: "Strategic Observations",
     headline: "Here's the context behind those gaps.",
     intro:
-      "Understanding Planned's strategic position explains both the gaps and the opportunities. They're not trying to beat Cvent — they're trying to make Cvent irrelevant for a specific buyer.",
+      "Understanding Planned's strategic position explains both the gaps and the opportunities. The goal isn't to beat Cvent — it's to make Cvent irrelevant for a specific buyer.",
     pullQuoteBefore:
       "These gaps don't exist in a vacuum. Planned is making deliberate bets.",
   },
@@ -406,8 +392,9 @@ function PullQuote({ text }) {
 
 // Demo links for specific project cards
 const DEMO_LINKS = {
-  "6. Supplier Onboarding Self-Service Portal": "/demo/vendor-listing",
-  "8. API Middleware / Webhook Connector": "/demo/webhook-connector",
+  "1. Supplier Onboarding Self-Service Portal": "/demo/vendor-listing",
+  "2. API Middleware / Webhook Connector": "/demo/webhook-connector",
+  "3. Attendee Communication Hub": "/demo/communication-hub",
 };
 
 // ─── Item Card (always expanded) ──────────────────────────────────────────────
@@ -603,17 +590,21 @@ function ItemCard({ item, index, color }) {
 
       {/* Demo link */}
       {demoLink && (
-        <div style={{ marginTop: "16px", paddingTop: "14px", borderTop: "1px solid #f0f0f0" }}>
+        <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: "1px solid #f0f0f0" }}>
           <Link
             to={demoLink}
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: "6px",
-              fontSize: "12px",
-              fontWeight: 600,
-              color: color,
+              gap: "8px",
+              fontSize: "13px",
+              fontWeight: 700,
+              color: "#fff",
+              background: color,
               textDecoration: "none",
+              padding: "10px 18px",
+              borderRadius: "8px",
+              letterSpacing: "-0.1px",
             }}
           >
             See the demo &rarr;
@@ -621,6 +612,23 @@ function ItemCard({ item, index, color }) {
         </div>
       )}
     </div>
+  );
+}
+
+// ─── Disclaimer Note ──────────────────────────────────────────────────────────
+function DisclaimerBanner({ text }) {
+  return (
+    <p
+      style={{
+        fontSize: "16px",
+        color: "#999",
+        lineHeight: 1.7,
+        margin: "0 0 52px 0",
+        maxWidth: "640px",
+      }}
+    >
+      {text}
+    </p>
   );
 }
 
@@ -634,6 +642,7 @@ function NarrativeSection({ narrative, category }) {
       style={{ background: "#fff", borderTop: "1px solid #f0f0f0" }}
     >
       <div className="section-inner">
+        {narrative.disclaimer && <DisclaimerBanner text={narrative.disclaimer} />}
         <div
           ref={headingRef}
           style={{
@@ -886,31 +895,268 @@ function HeroSection() {
 }
 
 // ─── Closing Section ──────────────────────────────────────────────────────────
+const TOP_PROJECTS = [
+  {
+    number: "01",
+    title: "Supplier Onboarding Self-Service Portal",
+    effort: "Large (4–6 weeks)",
+    impact: "Reduces support load, scales the marketplace",
+    pain: {
+      label: "The Problem",
+      title: "Vendors Can't Manage Their Own Listings",
+      text: "Suppliers on the marketplace cannot update their profiles, add team members, or change pricing without contacting Planned support directly. This creates ongoing friction and makes scaling the vendor network dependent on manual staff effort.",
+    },
+    solution: {
+      label: "The Build",
+      title: "Self-Service Vendor Portal",
+      text: "A standalone portal where vendors claim their listing, upload photos and 360° tours, set availability calendars, manage team member access, and update pricing — all without ever touching support.",
+    },
+  },
+  {
+    number: "02",
+    title: "AI Venue & Meeting Request Assistant",
+    effort: "Small → Medium",
+    impact: "Removes the biggest barrier for non-professional planners",
+    pain: {
+      label: "The Problem",
+      title: "Finding Venues and Filing Requests Requires Too Much Manual Work",
+      text: "Planned's core user — an executive assistant, marketing manager, or team lead — isn't a professional planner. Searching for venues and filling out structured meeting request forms with the right fields and routing logic is friction they shouldn't have to absorb.",
+    },
+    solution: {
+      label: "The Build",
+      title: "Natural Language → Venue Results or Pre-Filled Event Request",
+      text: "Describe what you need in plain language: 'I need a space for 50 near Austin for a leadership retreat in October, under $8k.' The AI either returns ranked venue recommendations or pre-fills the MRF automatically. Start with the MRF (quick win), expand to the full venue engine from there.",
+    },
+  },
+  {
+    number: "03",
+    title: "Attendee Communication Hub",
+    effort: "Large (4–6 weeks)",
+    impact: "Solves the #1 user complaint across all review sites",
+    pain: {
+      label: "The Problem",
+      title: "In-Platform Communication Is Broken",
+      text: "Suppliers and clients report that messaging during contract negotiations is clunky and insufficient. Document sharing through the inbox is unreliable — Planned's own team has acknowledged the issue publicly in review responses.",
+    },
+    solution: {
+      label: "The Build",
+      title: "Multi-Channel Communication Dashboard",
+      text: "Threaded conversations per event, email + in-app messaging toggle, contract version tracking within threads, @mentions for team collaboration, and read receipts — all in one place.",
+    },
+  },
+];
+
+function PriorityProjectCard({ project, index, parentInView }) {
+  const delay = PRM ? 0 : 200 + index * 150;
+  return (
+    <div
+      style={{
+        opacity: parentInView ? 1 : 0,
+        transform: parentInView ? "translateY(0)" : "translateY(24px)",
+        transition: PRM
+          ? "none"
+          : `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms`,
+        background: "#fff",
+        border: "1px solid #e8e8e8",
+        borderRadius: "12px",
+        overflow: "hidden",
+      }}
+    >
+      {/* Card header */}
+      <div
+        style={{
+          padding: "20px 24px 16px",
+          borderBottom: "1px solid #f0f0f0",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          gap: "16px",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          <span
+            style={{
+              fontSize: "11px",
+              fontWeight: 700,
+              color: "#bbb",
+              letterSpacing: "0.5px",
+              fontVariantNumeric: "tabular-nums",
+            }}
+          >
+            {project.number}
+          </span>
+          <h3
+            style={{
+              fontSize: "15px",
+              fontWeight: 700,
+              color: "#0a0a0a",
+              margin: 0,
+              letterSpacing: "-0.2px",
+            }}
+          >
+            {project.title}
+          </h3>
+        </div>
+        <span
+          style={{
+            fontSize: "10px",
+            fontWeight: 600,
+            padding: "3px 8px",
+            borderRadius: "4px",
+            background: "#f0f0f0",
+            color: "#555",
+            border: "1px solid #d0d0d0",
+            whiteSpace: "nowrap",
+            letterSpacing: "0.3px",
+            flexShrink: 0,
+          }}
+        >
+          {project.effort}
+        </span>
+      </div>
+
+      {/* Pain → Solution */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr auto 1fr",
+          alignItems: "stretch",
+        }}
+      >
+        {/* Pain block */}
+        <div
+          style={{
+            padding: "20px 24px",
+            borderRight: "1px solid #f0f0f0",
+            background: "#fffafa",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "10px",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+              color: "#E74C3C",
+              marginBottom: "10px",
+            }}
+          >
+            {project.pain.label}
+          </div>
+          <div
+            style={{
+              fontSize: "13px",
+              fontWeight: 600,
+              color: "#0a0a0a",
+              marginBottom: "8px",
+              lineHeight: 1.4,
+            }}
+          >
+            {project.pain.title}
+          </div>
+          <p
+            style={{
+              fontSize: "12px",
+              color: "#777",
+              margin: 0,
+              lineHeight: 1.65,
+            }}
+          >
+            {project.pain.text}
+          </p>
+        </div>
+
+        {/* Arrow */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0 16px",
+            color: "#ccc",
+            fontSize: "18px",
+            background: "#fff",
+          }}
+        >
+          →
+        </div>
+
+        {/* Solution block */}
+        <div
+          style={{
+            padding: "20px 24px",
+            borderLeft: "1px solid #f0f0f0",
+            background: "#f7fff9",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "10px",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+              color: "#27AE60",
+              marginBottom: "10px",
+            }}
+          >
+            {project.solution.label}
+          </div>
+          <div
+            style={{
+              fontSize: "13px",
+              fontWeight: 600,
+              color: "#0a0a0a",
+              marginBottom: "8px",
+              lineHeight: 1.4,
+            }}
+          >
+            {project.solution.title}
+          </div>
+          <p
+            style={{
+              fontSize: "12px",
+              color: "#777",
+              margin: 0,
+              lineHeight: 1.65,
+            }}
+          >
+            {project.solution.text}
+          </p>
+        </div>
+      </div>
+
+      {/* Impact footer */}
+      <div
+        style={{
+          padding: "12px 24px",
+          borderTop: "1px solid #f0f0f0",
+          background: "#fafafa",
+          display: "flex",
+          gap: "8px",
+          alignItems: "center",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "10px",
+            fontWeight: 700,
+            textTransform: "uppercase",
+            letterSpacing: "0.8px",
+            color: "#bbb",
+          }}
+        >
+          Impact
+        </span>
+        <span style={{ fontSize: "12px", color: "#444", fontWeight: 500 }}>
+          {project.impact}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function ClosingSection() {
   const [headingRef, headingInView] = useInView(0.1);
-
-  const startOrder = [
-    {
-      week: "Week 1–2",
-      project: "#9 AI Meeting Request Assistant",
-      note: "Quickest win — showcases AI, directly helps non-professional planners",
-    },
-    {
-      week: "Week 3–5",
-      project: "#1 Smart Contract Analyzer",
-      note: "Builds on Planned's existing AI capability, high value for procurement",
-    },
-    {
-      week: "Week 5–7",
-      project: "#4 Budget Forecaster",
-      note: "Net-new feature competitors lack, great for demos and sales",
-    },
-    {
-      week: "Week 7+",
-      project: "#3 Communication Hub",
-      note: "Largest scope — solves the #1 pain point across all user reviews",
-    },
-  ];
 
   return (
     <section style={{ background: "#fafafa", borderTop: "1px solid #f0f0f0" }}>
@@ -935,88 +1181,45 @@ function ClosingSection() {
               marginBottom: "14px",
             }}
           >
-            Recommended Start Order
+            High Priority Projects
           </div>
           <h2
             style={{
               fontSize: "clamp(24px, 3.5vw, 44px)",
               fontWeight: 700,
               color: "#0a0a0a",
-              margin: "0 0 48px 0",
+              margin: "0 0 12px 0",
               lineHeight: 1.1,
               letterSpacing: "-1px",
             }}
           >
-            Where to start.
+            Where I'd start.
           </h2>
+          <p
+            style={{
+              fontSize: "clamp(14px, 1.4vw, 16px)",
+              color: "#666",
+              maxWidth: "560px",
+              lineHeight: 1.7,
+              margin: "0 0 48px 0",
+            }}
+          >
+            Three projects that map directly to the pain points above — each with a clear problem and a concrete build.
+          </p>
         </div>
 
-        <div>
-          {startOrder.map(({ week, project, note }, i) => {
-            return (
-              <ClosingRow
-                key={i}
-                week={week}
-                project={project}
-                note={note}
-                index={i}
-                parentInView={headingInView}
-                isFirst={i === 0}
-              />
-            );
-          })}
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          {TOP_PROJECTS.map((project, i) => (
+            <PriorityProjectCard
+              key={project.number}
+              project={project}
+              index={i}
+              parentInView={headingInView}
+            />
+          ))}
         </div>
       </div>
     </section>
-  );
-}
-
-function ClosingRow({ week, project, note, index, parentInView, isFirst }) {
-  const delay = PRM ? 0 : 300 + index * 100;
-  return (
-    <div
-      style={{
-        display: "flex",
-        gap: "clamp(16px, 3vw, 32px)",
-        padding: "24px 0",
-        borderTop: isFirst ? "2px solid #0a0a0a" : "1px solid #e8e8e8",
-        alignItems: "flex-start",
-        opacity: parentInView ? 1 : 0,
-        transform: parentInView ? "translateY(0)" : "translateY(16px)",
-        transition: PRM
-          ? "none"
-          : `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`,
-      }}
-    >
-      <div
-        style={{
-          minWidth: "80px",
-          fontSize: "10px",
-          fontWeight: 700,
-          color: "#0a0a0a",
-          textTransform: "uppercase",
-          letterSpacing: "0.6px",
-          paddingTop: "3px",
-        }}
-      >
-        {week}
-      </div>
-      <div>
-        <div
-          style={{
-            fontWeight: 600,
-            color: "#0a0a0a",
-            fontSize: "15px",
-            marginBottom: "5px",
-          }}
-        >
-          {project}
-        </div>
-        <div style={{ color: "#888", fontSize: "13px", lineHeight: 1.55 }}>
-          {note}
-        </div>
-      </div>
-    </div>
   );
 }
 
