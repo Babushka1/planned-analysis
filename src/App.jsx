@@ -15,7 +15,8 @@ const categories = [
         description:
           "Multiple reviewers (both suppliers and clients) report that communicating directly on the platform — especially during contract negotiations — is clunky. Suppliers say chat-only communication is insufficient and want phone/email/in-person options surfaced within the workflow.",
         severity: "High",
-        source: "Capterra, SoftwareAdvice reviews",
+        source: "Capterra reviews (Madison B., Hugo M.)",
+        sourceUrl: "https://www.capterra.com/p/234623/Planned/reviews/",
       },
       {
         title: "Document Sharing UX Is Broken",
@@ -23,6 +24,7 @@ const categories = [
           "Users find it challenging to send and receive documents through the inbox/messaging feature. Planned's own team acknowledged this in review responses, saying they're working on a fix.",
         severity: "High",
         source: "Capterra review (Greg B.)",
+        sourceUrl: "https://www.capterra.com/p/234623/Planned/reviews/",
       },
       {
         title: "No Public API Available",
@@ -30,27 +32,31 @@ const categories = [
           "GetApp confirms Planned does not offer an API. This blocks integrations with CRMs (Salesforce, HubSpot), travel management tools, expense systems, and custom enterprise workflows — a dealbreaker for large organizations.",
         severity: "Critical",
         source: "GetApp listing",
+        sourceUrl: "https://www.getapp.com/collaboration-software/a/planned/",
       },
       {
         title: "Vendor Response Delays",
         description:
           "During beta/rollout periods, users had to contact their Planned rep manually to get vendor replies. The automated vendor outreach pipeline has reliability gaps.",
         severity: "Medium",
-        source: "SoftwareAdvice review (Robert)",
+        source: "Capterra review (Robert B.)",
+        sourceUrl: "https://www.capterra.com/p/234623/Planned/reviews/",
       },
       {
         title: "Vendors Can't Edit Their Own Listings",
         description:
           "Suppliers on the marketplace cannot self-manage their profiles or add team members without contacting Planned support. This creates friction and dependency on Planned staff.",
         severity: "Medium",
-        source: "SoftwareAdvice review",
+        source: "Capterra review (Hugo M.)",
+        sourceUrl: "https://www.capterra.com/p/234623/Planned/reviews/",
       },
       {
         title: "Visual Presentation Needs Work",
         description:
           'A supplier-side user explicitly said "I think we can work on visual presentation!" — suggesting the UI/UX for how venues and proposals are displayed could be more polished or branded.',
         severity: "Low",
-        source: "Capterra review (Alma)",
+        source: "Capterra review (Alma G.)",
+        sourceUrl: "https://www.capterra.com/p/234623/Planned/reviews/",
       },
     ],
   },
@@ -521,9 +527,20 @@ function ItemCard({ item, index, color }) {
               >
                 Source
               </div>
-              <div style={{ color: "#555", fontSize: "12px" }}>
-                {item.source}
-              </div>
+              {item.sourceUrl ? (
+                <a
+                  href={item.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#555", fontSize: "12px", textDecoration: "underline", textUnderlineOffset: "2px" }}
+                >
+                  {item.source}
+                </a>
+              ) : (
+                <div style={{ color: "#555", fontSize: "12px" }}>
+                  {item.source}
+                </div>
+              )}
             </div>
           )}
           {item.competitor && (
