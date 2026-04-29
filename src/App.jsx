@@ -13,7 +13,7 @@ const categories = [
       {
         title: "In-Platform Communication Is Limited",
         description:
-          "Multiple reviewers (both suppliers and clients) report that communicating directly on the platform — especially during contract negotiations — is clunky. Suppliers say chat-only communication is insufficient and want phone/email/in-person options surfaced within the workflow.",
+          "Multiple reviewers (both suppliers and clients) report that communicating directly on the platform, especially during contract negotiations, is clunky. Suppliers say chat-only communication is insufficient and want phone/email/in-person options surfaced within the workflow.",
         severity: "High",
         source: "Capterra reviews (Madison B., Hugo M.)",
         sourceUrl: "https://www.capterra.com/p/234623/Planned/reviews/",
@@ -29,7 +29,7 @@ const categories = [
       {
         title: "No Public API Available",
         description:
-          "To my knowledge, there is no Planned API. This blocks integrations with CRMs (Salesforce, HubSpot), travel management tools, expense systems, and custom enterprise workflows — a dealbreaker for large organizations.",
+          "To my knowledge, there is no Planned API. This blocks integrations with CRMs (Salesforce, HubSpot), travel management tools, expense systems, and custom enterprise workflows, making it a dealbreaker for large organizations.",
         severity: "Critical",
         source: "GetApp listing",
         sourceUrl: "https://www.getapp.com/collaboration-software/a/planned/",
@@ -53,7 +53,7 @@ const categories = [
       {
         title: "Visual Presentation Needs Work",
         description:
-          'A supplier-side user explicitly said "I think we can work on visual presentation!" — suggesting the UI/UX for how venues and proposals are displayed could be more polished or branded.',
+          'A supplier-side user explicitly said "I think we can work on visual presentation!", suggesting the UI/UX for how venues and proposals are displayed could be more polished or branded.',
         severity: "Low",
         source: "Capterra review (Alma G.)",
         sourceUrl: "https://www.capterra.com/p/234623/Planned/reviews/",
@@ -119,7 +119,7 @@ const categories = [
       {
         title: "1. Supplier Onboarding Self-Service Portal",
         description:
-          "A standalone portal where vendors can claim/create their listing, upload photos and 360° tours, set availability calendars, manage team member access, and update pricing — all without contacting Planned support. Directly addresses vendor-side friction from reviews.",
+          "A standalone portal where vendors can claim/create their listing, upload photos and 360° tours, set availability calendars, manage team member access, and update pricing, all without contacting Planned support. Directly addresses vendor-side friction from reviews.",
         effort: "Large (4-6 weeks)",
         tech: "React, Node.js, image upload/CDN, calendar component",
         impact: "Reduces support load, scales the marketplace",
@@ -143,7 +143,7 @@ const categories = [
       {
         title: "4. AI Venue & Meeting Request Assistant",
         description:
-          "Two natural-language interfaces, one underlying idea. The venue engine lets a planner describe their event in plain language ('50-person leadership retreat near Austin, outdoor space, under $8k, mid-October') and returns ranked venue recommendations. The MRF assistant takes the same input and pre-fills Planned's meeting request form automatically — routing it for approval without manual field entry. Start with the MRF (1–2 weeks); expand to the venue engine from there.",
+          "Two natural-language interfaces, one underlying idea. The venue engine lets a planner describe their event in plain language ('50-person leadership retreat near Austin, outdoor space, under $8k, mid-October') and returns ranked venue recommendations. The MRF assistant takes the same input and pre-fills Planned's meeting request form automatically, routing it for approval without manual field entry. Start with the MRF (1–2 weeks); expand to the venue engine from there.",
         effort: "Small (1-2 weeks)",
         tech: "Claude API, React, vector embeddings, geocoding API, JSON schema mapping",
         impact: "Removes the biggest barrier for non-professional planners",
@@ -151,7 +151,7 @@ const categories = [
       {
         title: "5. Event Budget Forecaster & Scenario Planner",
         description:
-          "An interactive tool where planners input event parameters (headcount, city, event type, duration) and get AI-generated budget estimates broken down by category (venue, F&B, AV, travel, accommodation). Include a scenario comparison mode: 'What if we do Chicago vs. Miami?' or 'What if attendance drops 20%?' — with attrition cost modeling.",
+          "An interactive tool where planners input event parameters (headcount, city, event type, duration) and get AI-generated budget estimates broken down by category (venue, F&B, AV, travel, accommodation). Include a scenario comparison mode: 'What if we do Chicago vs. Miami?' or 'What if attendance drops 20%?' with attrition cost modeling.",
         effort: "Medium (2-3 weeks)",
         tech: "React, Claude API, D3.js/Recharts for visualizations",
         impact: "New value-add feature Planned doesn't currently offer",
@@ -196,12 +196,12 @@ const categories = [
       {
         title: "AI Is the Key Differentiator",
         description:
-          "Planned has active AI implementation built into the product. The AI reads contracts, auto-fills event briefs, matches suppliers, and extracts room block data — ahead of most competitors. Doubling down on AI capabilities is the clearest path to winning against Cvent.",
+          "Planned has active AI implementation built into the product. The AI reads contracts, auto-fills event briefs, matches suppliers, and extracts room block data, putting it ahead of most competitors. Doubling down on AI capabilities is the clearest path to winning against Cvent.",
       },
       {
         title: "Target Market Is Shifting Up",
         description:
-          "Originally targeting companies with 2,000+ employees, recent listings say 5,000+. This signals a push upmarket toward enterprise procurement teams — which makes API availability and CRM integration even more critical.",
+          "Originally targeting companies with 2,000+ employees, recent listings say 5,000+. This signals a push upmarket toward enterprise procurement teams, which makes API availability and CRM integration even more critical.",
       },
       {
         title: "Montréal HQ with $54.6M Raised",
@@ -211,7 +211,7 @@ const categories = [
       {
         title: "The 'Non-Professional Planner' Angle Is Brilliant",
         description:
-          "Planned explicitly targets occasional planners — executive assistants, marketing managers, team leads — who need to book events but aren't event professionals. This is a massive underserved market that Cvent's complexity actively alienates. Every project we build should keep this persona in mind.",
+          "Planned explicitly targets occasional planners (executive assistants, marketing managers, team leads) who need to book events but aren't event professionals. This is a massive underserved market that Cvent's complexity actively alienates. Every project we build should keep this persona in mind.",
       },
     ],
   },
@@ -240,17 +240,17 @@ const NARRATIVE = [
     label: "User Pain Points",
     headline: "Here's what's broken.",
     intro:
-      "Event planners working with Planned have flagged recurring friction across communication, integrations, and vendor management. These aren't edge cases — they're the platform's most-requested fixes.",
+      "Event planners working with Planned have flagged recurring friction across communication, integrations, and vendor management. These aren't edge cases; they're the platform's most-requested fixes.",
     pullQuoteBefore: null,
     disclaimer:
-      "This is my personal analysis based on publicly available information — I don't have visibility into what the team is working on internally. It's very possible some of these problems are already being addressed, or that certain directions aren't feasible given constraints I'm not aware of.",
+      "This is my personal analysis based on publicly available information, and I don't have visibility into what the team is working on internally. It's very possible some of these problems are already being addressed, or that certain directions aren't feasible given constraints I'm not aware of.",
   },
   {
     id: "gaps",
     label: "Feature Gaps vs. Competitors",
     headline: "Here's where the platform falls behind.",
     intro:
-      "Planned's core competitors — Cvent, Bizzabo, Stova — offer capabilities that Planned is missing. Some gaps are by design for a focused sourcing platform. Others are real enterprise blockers.",
+      "Planned's core competitors (Cvent, Bizzabo, Stova) offer capabilities that Planned is missing. Some gaps are by design for a focused sourcing platform. Others are real enterprise blockers.",
     pullQuoteBefore: null,
   },
   {
@@ -258,7 +258,7 @@ const NARRATIVE = [
     label: "Strategic Observations",
     headline: "Here's the context behind those gaps.",
     intro:
-      "Understanding Planned's strategic position explains both the gaps and the opportunities. The goal isn't to beat Cvent — it's to make Cvent irrelevant for a specific buyer.",
+      "Understanding Planned's strategic position explains both the gaps and the opportunities. The goal isn't to beat Cvent; it's to make Cvent irrelevant for a specific buyer.",
     pullQuoteBefore: null,
   },
   {
@@ -266,7 +266,7 @@ const NARRATIVE = [
     label: "Projects We Can Build",
     headline: "Here's how we solve it.",
     intro:
-      "Given the pain points, the competitive gaps, and Planned's strategic focus on the non-professional planner, these are the highest-leverage builds — ordered by effort and impact.",
+      "Given the pain points, the competitive gaps, and Planned's strategic focus on the non-professional planner, these are the highest-leverage builds, ordered by effort and impact.",
     pullQuoteBefore: null,
   },
 ];
@@ -288,7 +288,7 @@ const PRM =
 
 function useInView(threshold = 0.12) {
   const ref = useRef(null);
-  // If user prefers reduced motion, start as visible — no animation
+  // If user prefers reduced motion, start as visible (no animation)
   const [inView, setInView] = useState(PRM);
 
   useEffect(() => {
@@ -841,7 +841,7 @@ function HeroSection() {
             letterSpacing: "-0.2px",
           }}
         >
-          A corporate event sourcing and payment platform — here&rsquo;s where
+          A corporate event sourcing and payment platform: here&rsquo;s where
           it excels, where it falls short, and how to build what&rsquo;s
           missing.
         </p>
@@ -906,7 +906,7 @@ const TOP_PROJECTS = [
     solution: {
       label: "The Build",
       title: "Self-Service Vendor Portal",
-      text: "A standalone portal where vendors claim their listing, upload photos and 360° tours, set availability calendars, manage team member access, and update pricing — all without ever touching support.",
+      text: "A standalone portal where vendors claim their listing, upload photos and 360° tours, set availability calendars, manage team member access, and update pricing, all without ever touching support.",
     },
   },
   {
@@ -917,7 +917,7 @@ const TOP_PROJECTS = [
     pain: {
       label: "The Problem",
       title: "Finding Venues and Filing Requests Requires Too Much Manual Work",
-      text: "Planned's core user — an executive assistant, marketing manager, or team lead — isn't a professional planner. Searching for venues and filling out structured meeting request forms with the right fields and routing logic is friction they shouldn't have to absorb.",
+      text: "Planned's core user (an executive assistant, marketing manager, or team lead) isn't a professional planner. Searching for venues and filling out structured meeting request forms with the right fields and routing logic is friction they shouldn't have to absorb.",
     },
     solution: {
       label: "The Build",
@@ -933,12 +933,12 @@ const TOP_PROJECTS = [
     pain: {
       label: "The Problem",
       title: "In-Platform Communication Is Broken",
-      text: "Suppliers and clients report that messaging during contract negotiations is clunky and insufficient. Document sharing through the inbox is unreliable — Planned's own team has acknowledged the issue publicly in review responses.",
+      text: "Suppliers and clients report that messaging during contract negotiations is clunky and insufficient. Document sharing through the inbox is unreliable, and Planned's own team has acknowledged the issue publicly in review responses.",
     },
     solution: {
       label: "The Build",
       title: "Multi-Channel Communication Dashboard",
-      text: "Threaded conversations per event, email + in-app messaging toggle, contract version tracking within threads, @mentions for team collaboration, and read receipts — all in one place.",
+      text: "Threaded conversations per event, email + in-app messaging toggle, contract version tracking within threads, @mentions for team collaboration, and read receipts, all in one place.",
     },
   },
 ];
@@ -1201,7 +1201,7 @@ function ClosingSection() {
               margin: "0 0 48px 0",
             }}
           >
-            Three projects that map directly to the pain points above — each with a clear problem and a concrete build.
+            Three projects that map directly to the pain points above, each with a clear problem and a concrete build.
           </p>
         </div>
 
